@@ -19,3 +19,8 @@
 
 # Go workspace file
 go.work
+
+# Ignore all files except go files
+**/*
+!**/*.go
+!**/
