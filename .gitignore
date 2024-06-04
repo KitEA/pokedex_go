@@ -23,4 +23,5 @@ go.work
 # Ignore all files except go files
 **/*
 !**/*.go
+!**/*.mod
 !**/

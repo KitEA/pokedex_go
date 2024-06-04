@@ -10,10 +10,10 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
-func startRepl() {
+func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	availableCmds := getAvailableCommands()
 
@@ -27,10 +27,14 @@ func startRepl() {
 			continue
 		}
 
-		if command, ok := availableCmds[cmdName]; ok {
-			command.callback()
-		} else {
+		command, ok := availableCmds[cmdName]
+		if !ok {
 			fmt.Printf("%s: command not found\n", input)
+		}
+
+		err := command.callback(cfg)
+		if err != nil {
+			fmt.Println(err)
 		}
 	}
 }
@@ -65,6 +69,16 @@ func getAvailableCommands() map[string]cliCommand {
 			name:        "exit",
 			description: "Exit the Pokedex",
 			callback:    commandExit,
+		},
+		"map": {
+			name:        "map",
+			description: "Displays next pokemon locations",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapB",
+			description: "Displays previous pokemon locations",
+			callback:    commandMapB,
 		},
 	}
 }
